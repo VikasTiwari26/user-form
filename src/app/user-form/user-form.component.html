@@ -22,6 +22,9 @@
                     <mat-checkbox checked="true" (click)="showPet()">I have a pet</mat-checkbox>
                     <div *ngIf="show==true">
                         <div formArrayName="pets">
+                            <div class="pet_container">
+                                <p  class="add_pet" (click)="addPet()">+</p> <p>Add another pet</p>
+                            </div>
                             <div *ngFor="let item of pets.controls; let i=index">
                                 <div [formGroupName]="i" class="pets">
                                     <mat-form-field>
@@ -45,7 +48,7 @@
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                    <p (click)="addPet()">+</p>
+                                    
                                     <!-- <p (click)="deletePet(i)">X</p> -->
                                 </div>
                             </div>

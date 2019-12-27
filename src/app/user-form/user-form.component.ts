@@ -30,10 +30,11 @@ export class UserFormComponent implements OnInit {
       breed: [''],
       is_active:[1],
       gender:[null],
-      date_of_birth:[null],
+      date_of_birth:[""],
       is_spayed:[null],
       avatar_url:[null],
-      vaccination_date:[null]
+      vaccination_date:[null],
+      weight:[null]
     });
   }
   
