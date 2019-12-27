@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { breeds } from '../json/breeds';
 import { types } from '../json/types';
 import { element } from 'protractor';
@@ -15,6 +15,7 @@ export class UserFormComponent implements OnInit {
   breeds=breeds;
   types=types;
   pet_breeds:any[];
+  is_pet:boolean=true;
 
   constructor(
     public fb:FormBuilder,
@@ -25,9 +26,9 @@ export class UserFormComponent implements OnInit {
   show:boolean=true;
   pet_data():FormGroup{
     return this.fb.group({
-      name: [''],
-      type: [''],
-      breed: [''],
+      name: ['',{updateOn:'change'}],
+      type: ['',{updateOn:'change'}],
+      breed: ['',{updateOn:'change'}],
       is_active:[1],
       gender:[null],
       date_of_birth:[""],
@@ -40,14 +41,15 @@ export class UserFormComponent implements OnInit {
   
   ngOnInit() {
     this.user=this.fb.group({
-      firstname:[''],
-      lastname:[''],
-      phone:[''],
-      email:[''],
+      firstname:['',{updateOn:'change'}],
+      lastname:['',{updateOn:'change'}],
+      phone:['',{updateOn:'change'},Validators.pattern["^[6-9]{1}[0-9]{9}$"]],
+      email:['',{updateOn:'change'},Validators.pattern["^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$"]],
       pets:this.fb.array([this.pet_data()])
     })
   }
 
+  f() { return this.user.controls; }
   get pets(){
     return this.user.get('pets') as FormArray;
   }
@@ -75,7 +77,10 @@ export class UserFormComponent implements OnInit {
     user.value.user_id=null;
     user.value.stateName="";
     user.value.cityName="";
-    
+    if(!this.is_pet)
+    {
+      pets=[];
+    }
     console.log({user:user.value,isNewImage:false,pets:pets});
     this.regService.addUser({user:user.value,isNewImage:false,pets:pets}).subscribe(
       res=>{console.log(res)},
@@ -85,6 +90,7 @@ export class UserFormComponent implements OnInit {
 
   showPet(){
     this.show=!this.show;
+    this.is_pet=!this.is_pet;
   }
 
   getBreeds(type){
